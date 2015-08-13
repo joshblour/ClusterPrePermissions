@@ -39,8 +39,9 @@ NSString *const ClusterPrePermissionsDidAskForNotifications = @"ClusterPrePermis
 #import <EventKit/EventKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AVFoundation/AVFoundation.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 
-@interface ClusterPrePermissions () <UIAlertViewDelegate, CLLocationManagerDelegate>
+@interface ClusterPrePermissions () <UIAlertViewDelegate, CLLocationManagerDelegate, CBPeripheralManagerDelegate>
 
 @property (strong, nonatomic) UIAlertView *preAVPermissionAlertView;
 @property (copy, nonatomic) ClusterPrePermissionCompletionHandler avPermissionCompletionHandler;
@@ -62,7 +63,13 @@ NSString *const ClusterPrePermissionsDidAskForNotifications = @"ClusterPrePermis
 
 @property (strong, nonatomic) UIAlertView *preNotificationPermissionAlertView;
 @property (copy, nonatomic) ClusterPrePermissionCompletionHandler notificationPermissionCompletionHandler;
+
 @property (assign, nonatomic) ClusterNotificationType requestedNotificationTypes;
+
+@property (strong, nonatomic) UIAlertView *preBluetoothPermissionAlertView;
+@property (copy, nonatomic) ClusterPrePermissionCompletionHandler bluetoothPermissionCompletionHandler;
+@property (strong, nonatomic) CBPeripheralManager *peripheralManager;
+
 
 + (ClusterAuthorizationStatus) AVPermissionAuthorizationStatusForMediaType:(NSString*)mediaType;
 - (void) showActualAVPermissionAlertWithType:(ClusterAVAuthorizationType)mediaType;
@@ -71,6 +78,7 @@ NSString *const ClusterPrePermissionsDidAskForNotifications = @"ClusterPrePermis
 - (void) showActualEventPermissionAlert:(ClusterEventAuthorizationType)eventType;
 - (void) showActualLocationPermissionAlert;
 - (void) showActualNotificationPermissionAlert;
+- (void) showActualBluetoothPermissionAlert;
 
 
 - (void) fireAVPermissionCompletionHandlerWithType:(ClusterAVAuthorizationType)mediaType;
@@ -80,6 +88,7 @@ NSString *const ClusterPrePermissionsDidAskForNotifications = @"ClusterPrePermis
 - (void) fireEventPermissionCompletionHandler:(ClusterEventAuthorizationType)eventType;
 - (void) fireLocationPermissionCompletionHandler;
 - (void) fireNotificationPermissionCompletionHandler;
+- (void) fireBluetoothPermissionCompletionHandler;
 
 - (NSUInteger)EKEquivalentEventType:(ClusterEventAuthorizationType)eventType;
 - (BOOL)locationAuthorizationStatusPermitsAccess:(CLAuthorizationStatus)authorizationStatus;
@@ -202,21 +211,24 @@ static ClusterPrePermissions *__sharedInstance;
     }
 }
 
-//+(ClusterAuthorizationStatus)bluetoothPermissionAuthorizationStatus {
-//    int status = [CBPeripheralManager authorizationStatus];
-//
-//    switch (status) {
-//        case CBPeripheralManagerAuthorizationStatusAuthorized:
-//            return ClusterAuthorizationStatusAuthorized;
-//        case CBPeripheralManagerAuthorizationStatusDenied:
-//            return ClusterAuthorizationStatusDenied;
-//        case CBPeripheralManagerAuthorizationStatusRestricted:
-//            return ClusterAuthorizationStatusRestricted;
-//        default:
-//            return ClusterAuthorizationStatusUnDetermined;
-//    }
-//
-//}
++(ClusterAuthorizationStatus)bluetoothPermissionAuthorizationStatus {
+    int status = [CBPeripheralManager authorizationStatus];
+
+    switch (status) {
+        case CBPeripheralManagerAuthorizationStatusAuthorized:
+            return ClusterAuthorizationStatusAuthorized;
+            
+        case CBPeripheralManagerAuthorizationStatusDenied:
+            return ClusterAuthorizationStatusDenied;
+        
+        case CBPeripheralManagerAuthorizationStatusRestricted:
+            return ClusterAuthorizationStatusRestricted;
+        
+        default:
+            return ClusterAuthorizationStatusUnDetermined;
+    }
+
+}
 
 +(ClusterAuthorizationStatus)notificationPermissionAuthorizationStatus {
     BOOL didAskForPermission = [[NSUserDefaults standardUserDefaults] boolForKey:ClusterPrePermissionsDidAskForNotifications];
@@ -744,7 +756,7 @@ static ClusterPrePermissions *__sharedInstance;
         [self.preNotificationPermissionAlertView show];
     } else {
         if (completionHandler) {
-            completionHandler((status == ClusterAuthorizationStatusUnDetermined),
+            completionHandler((status == ClusterAuthorizationStatusAuthorized),
                               ClusterDialogResultNoActionTaken,
                               ClusterDialogResultNoActionTaken);
         }
@@ -805,6 +817,91 @@ static ClusterPrePermissions *__sharedInstance;
 }
 
 
+#pragma mark - Bluetooth Permissions Help
+
+
+- (void) showBluetoothPermissionsWithTitle:(NSString *)requestTitle
+                                  message:(NSString *)message
+                          denyButtonTitle:(NSString *)denyButtonTitle
+                         grantButtonTitle:(NSString *)grantButtonTitle
+                        completionHandler:(ClusterPrePermissionCompletionHandler)completionHandler
+{
+    if (requestTitle.length == 0) {
+        requestTitle = @"Access Bluetooth?";
+    }
+    denyButtonTitle  = [self titleFor:ClusterTitleTypeDeny fromTitle:denyButtonTitle];
+    grantButtonTitle = [self titleFor:ClusterTitleTypeRequest fromTitle:grantButtonTitle];
+    
+    int status = [CBPeripheralManager authorizationStatus];
+
+    if (status == CBPeripheralManagerAuthorizationStatusNotDetermined) {
+        self.bluetoothPermissionCompletionHandler = completionHandler;
+        self.preBluetoothPermissionAlertView = [[UIAlertView alloc] initWithTitle:requestTitle
+                                                                        message:message
+                                                                       delegate:self
+                                                              cancelButtonTitle:denyButtonTitle
+                                                              otherButtonTitles:grantButtonTitle, nil];
+        [self.preBluetoothPermissionAlertView show];
+    } else {
+        if (completionHandler) {
+            completionHandler((status == CBPeripheralManagerAuthorizationStatusAuthorized),
+                              ClusterDialogResultNoActionTaken,
+                              ClusterDialogResultNoActionTaken);
+        }
+    }
+}
+
+
+- (void) showActualBluetoothPermissionAlert
+{
+    self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:nil queue:nil];
+    self.peripheralManager.delegate = self;
+    [self.peripheralManager startAdvertising:@{}];
+}
+
+
+- (void) fireBluetoothPermissionCompletionHandler
+{
+    int status = [CBPeripheralManager authorizationStatus];
+    if (self.bluetoothPermissionCompletionHandler) {
+        ClusterDialogResult userDialogResult = ClusterDialogResultGranted;
+        ClusterDialogResult systemDialogResult = ClusterDialogResultGranted;
+        if (status == CBPeripheralManagerAuthorizationStatusNotDetermined) {
+            userDialogResult = ClusterDialogResultDenied;
+            systemDialogResult = ClusterDialogResultNoActionTaken;
+        } else if (status == CBPeripheralManagerAuthorizationStatusAuthorized) {
+            userDialogResult = ClusterDialogResultGranted;
+            systemDialogResult = ClusterDialogResultGranted;
+        } else if (status == CBPeripheralManagerAuthorizationStatusDenied) {
+            userDialogResult = ClusterDialogResultGranted;
+            systemDialogResult = ClusterDialogResultDenied;
+        } else if (status == CBPeripheralManagerAuthorizationStatusRestricted) {
+            userDialogResult = ClusterDialogResultGranted;
+            systemDialogResult = ClusterDialogResultParentallyRestricted;
+        }
+        self.bluetoothPermissionCompletionHandler((status == CBPeripheralManagerAuthorizationStatusAuthorized),
+                                                userDialogResult,
+                                                systemDialogResult);
+        self.bluetoothPermissionCompletionHandler = nil;
+    }
+    
+    if (self.peripheralManager) {
+        [self.peripheralManager stopAdvertising], self.peripheralManager = nil;
+    }
+
+}
+
+#pragma mark CBPeripheralManagerDelegate
+
+- (void) peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheralManager {
+    int status = [CBPeripheralManager authorizationStatus];
+    
+    if (status != CBPeripheralManagerAuthorizationStatusNotDetermined) {
+        [self fireBluetoothPermissionCompletionHandler];
+    }
+}
+
+
 
 #pragma mark - UIAlertViewDelegate
 
@@ -860,10 +957,19 @@ static ClusterPrePermissions *__sharedInstance;
             // User said NO, that jerk.
             [self fireNotificationPermissionCompletionHandler];
         } else {
-            // User granted access, now try to trigger the real location access
+            // User granted access, now try to trigger the real notification access
             [self showActualNotificationPermissionAlert];
         }
+    } else if (alertView == self.preBluetoothPermissionAlertView) {
+        if (buttonIndex == alertView.cancelButtonIndex) {
+            // User said NO, that jerk.
+            [self fireBluetoothPermissionCompletionHandler];
+        } else {
+            // User granted access, now try to trigger the real bluetooth access
+            [self showActualBluetoothPermissionAlert];
+        }
     }
+    
 }
 
 #pragma mark - Titles

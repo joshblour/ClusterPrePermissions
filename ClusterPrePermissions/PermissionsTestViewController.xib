@@ -7,8 +7,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PermissionsTestViewController">
             <connections>
+                <outlet property="bluetoothPermissionResultLabel" destination="gwV-ak-q99" id="EXX-FD-Uv6"/>
                 <outlet property="contactsPermissionResultLabel" destination="zp7-Jm-cAw" id="PN9-o9-JVR"/>
                 <outlet property="locationPermissionResultLabel" destination="i5o-hO-5Pg" id="TmJ-55-bXB"/>
+                <outlet property="notificationPermissionResultLabel" destination="n0B-eI-hga" id="Fko-J9-k1b"/>
                 <outlet property="photoPermissionResultLabel" destination="vxu-pf-S5K" id="Tqe-yj-764"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -19,12 +21,12 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nsq-IS-dfv">
-                    <rect key="frame" x="20" y="110" width="280" height="348"/>
+                    <rect key="frame" x="20" y="52" width="280" height="464"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FVi-Aj-8rP">
-                            <rect key="frame" x="0.0" y="0.0" width="280" height="44"/>
+                            <rect key="frame" x="0.0" y="0.0" width="280" height="30"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="44" id="Q9G-Ob-DKx"/>
+                                <constraint firstAttribute="height" constant="30" id="Q9G-Ob-DKx"/>
                             </constraints>
                             <state key="normal" title="Request Photo Permission"/>
                             <connections>
@@ -32,18 +34,18 @@
                             </connections>
                         </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="vxu-pf-S5K">
-                            <rect key="frame" x="0.0" y="52" width="280" height="64"/>
+                            <rect key="frame" x="0.0" y="38" width="280" height="50"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="64" id="z6C-fj-dEB"/>
+                                <constraint firstAttribute="height" constant="50" id="z6C-fj-dEB"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wsq-Dl-iiM">
-                            <rect key="frame" x="0.0" y="124" width="280" height="44"/>
+                            <rect key="frame" x="0.0" y="96" width="280" height="30"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="44" id="lnn-Sm-fHf"/>
+                                <constraint firstAttribute="height" constant="30" id="lnn-Sm-fHf"/>
                             </constraints>
                             <state key="normal" title="Request Contacts Permission"/>
                             <connections>
@@ -51,43 +53,71 @@
                             </connections>
                         </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="zp7-Jm-cAw">
-                            <rect key="frame" x="0.0" y="176" width="280" height="64"/>
+                            <rect key="frame" x="0.0" y="134" width="280" height="50"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="64" id="WE8-OJ-ckh"/>
+                                <constraint firstAttribute="height" constant="50" id="WE8-OJ-ckh"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="i5o-hO-5Pg">
-                            <rect key="frame" x="0.0" y="284" width="280" height="64"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="64" id="sKA-2y-srp"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i4W-XP-cUz">
-                            <rect key="frame" x="0.0" y="294" width="280" height="44"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="44" id="0Ej-Zn-5fB"/>
-                            </constraints>
-                            <state key="normal" title="Request Notification Permission"/>
-                            <connections>
-                                <action selector="onNotificationButtonPermissionTapped:" destination="-1" eventType="touchUpInside" id="2aO-ta-Kun"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EqR-Ej-vnL">
-                            <rect key="frame" x="0.0" y="232" width="280" height="44"/>
+                            <rect key="frame" x="0.0" y="176" width="280" height="30"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="44" id="cbe-QH-tHN"/>
+                                <constraint firstAttribute="height" constant="30" id="cbe-QH-tHN"/>
                             </constraints>
                             <state key="normal" title="Request Location Permission"/>
                             <connections>
                                 <action selector="onLocationButtonPermissionTapped:" destination="-1" eventType="touchUpInside" id="UWn-zY-75M"/>
                             </connections>
                         </button>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="i5o-hO-5Pg">
+                            <rect key="frame" x="0.0" y="214" width="280" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="sKA-2y-srp"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i4W-XP-cUz">
+                            <rect key="frame" x="0.0" y="272" width="280" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="0Ej-Zn-5fB"/>
+                            </constraints>
+                            <state key="normal" title="Request Notification Permission"/>
+                            <connections>
+                                <action selector="onNotificationButtonPermissionTapped:" destination="-1" eventType="touchUpInside" id="2aO-ta-Kun"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="n0B-eI-hga">
+                            <rect key="frame" x="0.0" y="310" width="280" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="fX6-uu-nBB"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3qY-Iz-Oza">
+                            <rect key="frame" x="0.0" y="368" width="280" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="EU3-Na-Ea6"/>
+                            </constraints>
+                            <state key="normal" title="Request Bluetooth Permission"/>
+                            <connections>
+                                <action selector="onBluetoothButtonPermissionTapped:" destination="-1" eventType="touchUpInside" id="s5z-Eg-3YP"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="gwV-ak-q99">
+                            <rect key="frame" x="0.0" y="406" width="280" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="hYK-Aa-lSw"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
@@ -98,13 +128,19 @@
                         <constraint firstItem="i4W-XP-cUz" firstAttribute="leading" secondItem="nsq-IS-dfv" secondAttribute="leading" id="CHy-ER-4gV"/>
                         <constraint firstItem="zp7-Jm-cAw" firstAttribute="bottom" secondItem="EqR-Ej-vnL" secondAttribute="top" constant="8" id="CmV-7k-YJ0"/>
                         <constraint firstItem="vxu-pf-S5K" firstAttribute="leading" secondItem="nsq-IS-dfv" secondAttribute="leading" id="Gkk-QZ-RQD"/>
+                        <constraint firstAttribute="trailing" secondItem="gwV-ak-q99" secondAttribute="trailing" id="H1l-cP-diO"/>
+                        <constraint firstItem="gwV-ak-q99" firstAttribute="leading" secondItem="nsq-IS-dfv" secondAttribute="leading" id="INM-sF-dO9"/>
+                        <constraint firstItem="gwV-ak-q99" firstAttribute="top" secondItem="3qY-Iz-Oza" secondAttribute="bottom" constant="8" id="IgU-WG-dFA"/>
                         <constraint firstItem="i5o-hO-5Pg" firstAttribute="top" secondItem="EqR-Ej-vnL" secondAttribute="bottom" constant="8" id="JBr-j9-7fv"/>
                         <constraint firstItem="zp7-Jm-cAw" firstAttribute="top" secondItem="Wsq-Dl-iiM" secondAttribute="bottom" constant="8" id="MUS-9r-hV5"/>
-                        <constraint firstAttribute="bottom" secondItem="i5o-hO-5Pg" secondAttribute="bottom" id="NVD-DQ-SX1"/>
+                        <constraint firstItem="n0B-eI-hga" firstAttribute="top" secondItem="i4W-XP-cUz" secondAttribute="bottom" constant="8" id="Mwj-Um-yGg"/>
                         <constraint firstAttribute="width" constant="280" id="S4X-Y2-1ML"/>
                         <constraint firstItem="Wsq-Dl-iiM" firstAttribute="leading" secondItem="nsq-IS-dfv" secondAttribute="leading" id="Vcw-ua-sSa"/>
+                        <constraint firstAttribute="trailing" secondItem="n0B-eI-hga" secondAttribute="trailing" id="aXf-y3-STp"/>
                         <constraint firstAttribute="trailing" secondItem="EqR-Ej-vnL" secondAttribute="trailing" id="eR8-dp-b0A"/>
-                        <constraint firstItem="i4W-XP-cUz" firstAttribute="top" secondItem="EqR-Ej-vnL" secondAttribute="bottom" constant="18" id="ggR-oo-BUr"/>
+                        <constraint firstItem="3qY-Iz-Oza" firstAttribute="leading" secondItem="nsq-IS-dfv" secondAttribute="leading" id="eve-o6-rdE"/>
+                        <constraint firstAttribute="bottom" secondItem="gwV-ak-q99" secondAttribute="bottom" constant="8" id="fm9-dM-A16"/>
+                        <constraint firstAttribute="trailing" secondItem="3qY-Iz-Oza" secondAttribute="trailing" id="hbP-g3-XD0"/>
                         <constraint firstItem="FVi-Aj-8rP" firstAttribute="top" secondItem="nsq-IS-dfv" secondAttribute="top" id="iMJ-ah-TzV"/>
                         <constraint firstItem="Wsq-Dl-iiM" firstAttribute="top" secondItem="vxu-pf-S5K" secondAttribute="bottom" constant="8" id="iWB-Np-FNu"/>
                         <constraint firstItem="i5o-hO-5Pg" firstAttribute="leading" secondItem="nsq-IS-dfv" secondAttribute="leading" id="nGQ-ig-bQb"/>
@@ -112,6 +148,9 @@
                         <constraint firstAttribute="trailing" secondItem="Wsq-Dl-iiM" secondAttribute="trailing" id="qSo-sy-CjS"/>
                         <constraint firstAttribute="trailing" secondItem="FVi-Aj-8rP" secondAttribute="trailing" id="v0K-fj-PaJ"/>
                         <constraint firstAttribute="trailing" secondItem="zp7-Jm-cAw" secondAttribute="trailing" id="vlL-Uv-6Rr"/>
+                        <constraint firstItem="i4W-XP-cUz" firstAttribute="top" secondItem="i5o-hO-5Pg" secondAttribute="bottom" constant="8" id="wtu-gR-14G"/>
+                        <constraint firstItem="n0B-eI-hga" firstAttribute="leading" secondItem="nsq-IS-dfv" secondAttribute="leading" id="wwC-Va-r5k"/>
+                        <constraint firstItem="3qY-Iz-Oza" firstAttribute="top" secondItem="n0B-eI-hga" secondAttribute="bottom" constant="8" id="x5X-RN-em5"/>
                         <constraint firstItem="EqR-Ej-vnL" firstAttribute="leading" secondItem="nsq-IS-dfv" secondAttribute="leading" id="xpc-F9-1eA"/>
                         <constraint firstAttribute="trailing" secondItem="vxu-pf-S5K" secondAttribute="trailing" id="zBo-H2-PcP"/>
                     </constraints>

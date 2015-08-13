@@ -219,6 +219,13 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Cluster Labs, Inc.";
 				TargetAttributes = {
+					65C599C518F35A4500AE202C = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
 					65C599E018F35A4600AE202C = {
 						TestTargetID = 65C599C518F35A4500AE202C;
 					};

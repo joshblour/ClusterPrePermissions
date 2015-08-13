@@ -14,6 +14,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *photoPermissionResultLabel;
 @property (strong, nonatomic) IBOutlet UILabel *contactsPermissionResultLabel;
 @property (strong, nonatomic) IBOutlet UILabel *locationPermissionResultLabel;
+@property (strong, nonatomic) IBOutlet UILabel *notificationPermissionResultLabel;
+@property (strong, nonatomic) IBOutlet UILabel *bluetoothPermissionResultLabel;
 
 @end
 
@@ -96,18 +98,35 @@
 {
     ClusterPrePermissions *permissions = [ClusterPrePermissions sharedPermissions];
     [permissions showNotificationPermissionsWithType:ClusterNotificationTypeAlert
-                                               title:@"Send push notifications?"
+                                               title:@"Receive push notifications?"
                                           message:@"Your message here"
                                   denyButtonTitle:@"Not Now"
                                  grantButtonTitle:@"Give Access"
                                 completionHandler:^(BOOL hasPermission,
                                                     ClusterDialogResult userDialogResult,
                                                     ClusterDialogResult systemDialogResult) {
-                                    [self updateResultLabel:self.locationPermissionResultLabel
+                                    [self updateResultLabel:self.notificationPermissionResultLabel
                                              withPermission:hasPermission
                                            userDialogResult:userDialogResult
                                          systemDialogResult:systemDialogResult];
                                 }];
+}
+
+- (IBAction)onBluetoothButtonPermissionTapped:(id)sender
+{
+    ClusterPrePermissions *permissions = [ClusterPrePermissions sharedPermissions];
+    [permissions showBluetoothPermissionsWithTitle:@"Use bluetooth?"
+                                             message:@"Your message here"
+                                     denyButtonTitle:@"Not Now"
+                                    grantButtonTitle:@"Give Access"
+                                   completionHandler:^(BOOL hasPermission,
+                                                       ClusterDialogResult userDialogResult,
+                                                       ClusterDialogResult systemDialogResult) {
+                                       [self updateResultLabel:self.bluetoothPermissionResultLabel
+                                                withPermission:hasPermission
+                                              userDialogResult:userDialogResult
+                                            systemDialogResult:systemDialogResult];
+                                   }];
 }
 
 
