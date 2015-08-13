@@ -70,6 +70,8 @@ NSString *const ClusterPrePermissionsDidAskForNotifications = @"ClusterPrePermis
 - (void) showActualContactPermissionAlert;
 - (void) showActualEventPermissionAlert:(ClusterEventAuthorizationType)eventType;
 - (void) showActualLocationPermissionAlert;
+- (void) showActualNotificationPermissionAlert;
+
 
 - (void) fireAVPermissionCompletionHandlerWithType:(ClusterAVAuthorizationType)mediaType;
 - (NSString*)AVEquivalentMediaType:(ClusterAVAuthorizationType)mediaType;
@@ -77,6 +79,8 @@ NSString *const ClusterPrePermissionsDidAskForNotifications = @"ClusterPrePermis
 - (void) fireContactPermissionCompletionHandler;
 - (void) fireEventPermissionCompletionHandler:(ClusterEventAuthorizationType)eventType;
 - (void) fireLocationPermissionCompletionHandler;
+- (void) fireNotificationPermissionCompletionHandler;
+
 - (NSUInteger)EKEquivalentEventType:(ClusterEventAuthorizationType)eventType;
 - (BOOL)locationAuthorizationStatusPermitsAccess:(CLAuthorizationStatus)authorizationStatus;
 - (NSString *)titleFor:(ClusterTitleType)titleType fromTitle:(NSString *)title;
@@ -713,7 +717,7 @@ static ClusterPrePermissions *__sharedInstance;
     }
 }
 
-#pragma mark - Push Notification Permissions Help
+#pragma mark - Notification Permissions Help
 
 - (void) showNotificationPermissionsWithType:(ClusterNotificationType)requestedType
                                            title:(NSString *)requestTitle
@@ -748,7 +752,7 @@ static ClusterPrePermissions *__sharedInstance;
 }
 
 
-- (void) showActualPushNotificationPermissionAlert
+- (void) showActualNotificationPermissionAlert
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidBecomeActive)
@@ -775,11 +779,11 @@ static ClusterPrePermissions *__sharedInstance;
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIApplicationDidBecomeActiveNotification
                                                   object:nil];
-    [self firePushNotificationPermissionCompletionHandler];
+    [self fireNotificationPermissionCompletionHandler];
 }
 
 
-- (void) firePushNotificationPermissionCompletionHandler
+- (void) fireNotificationPermissionCompletionHandler
 {
     ClusterAuthorizationStatus status = [ClusterPrePermissions notificationPermissionAuthorizationStatus];
     if (self.notificationPermissionCompletionHandler) {
@@ -854,10 +858,10 @@ static ClusterPrePermissions *__sharedInstance;
     } else if (alertView == self.preNotificationPermissionAlertView) {
         if (buttonIndex == alertView.cancelButtonIndex) {
             // User said NO, that jerk.
-            [self firePushNotificationPermissionCompletionHandler];
+            [self fireNotificationPermissionCompletionHandler];
         } else {
             // User granted access, now try to trigger the real location access
-            [self showActualPushNotificationPermissionAlert];
+            [self showActualNotificationPermissionAlert];
         }
     }
 }
