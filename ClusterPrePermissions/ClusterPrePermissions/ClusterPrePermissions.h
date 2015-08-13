@@ -92,6 +92,17 @@ typedef NS_ENUM(NSInteger, ClusterAVAuthorizationType) {
 };
 
 /**
+ * Authorization methods for the usage of push notification services.
+ */
+typedef NS_OPTIONS(NSUInteger, ClusterNotificationType) {
+    ClusterNotificationTypeNone    = 0,      // the application may not present any UI upon a notification being received
+    ClusterNotificationTypeBadge   = 1 << 0, // the application may badge its icon upon a notification being received
+    ClusterNotificationTypeSound   = 1 << 1, // the application may play a sound upon a notification being received
+    ClusterNotificationTypeAlert   = 1 << 2, // the application may display an alert upon a notification being received
+};
+
+
+/**
  * General callback for permissions. 
  * @param hasPermission Returns YES if system permission was granted 
  *                      or is already available, NO otherwise.
@@ -115,6 +126,7 @@ typedef void (^ClusterPrePermissionCompletionHandler)(BOOL hasPermission,
 + (ClusterAuthorizationStatus) contactsPermissionAuthorizationStatus;
 + (ClusterAuthorizationStatus) eventPermissionAuthorizationStatus:(ClusterEventAuthorizationType)eventType;
 + (ClusterAuthorizationStatus) locationPermissionAuthorizationStatus;
++ (ClusterAuthorizationStatus) notificationPermissionAuthorizationStatus;
 
 - (void) showAVPermissionsWithType:(ClusterAVAuthorizationType)mediaType
                              title:(NSString *)requestTitle
@@ -166,5 +178,13 @@ typedef void (^ClusterPrePermissionCompletionHandler)(BOOL hasPermission,
                                      denyButtonTitle:(NSString *)denyButtonTitle
                                     grantButtonTitle:(NSString *)grantButtonTitle
                                    completionHandler:(ClusterPrePermissionCompletionHandler)completionHandler;
+
+- (void) showNotificationPermissionsWithType:(ClusterNotificationType)requestedType
+                                           title:(NSString *)requestTitle
+                                         message:(NSString *)message
+                                 denyButtonTitle:(NSString *)denyButtonTitle
+                                grantButtonTitle:(NSString *)grantButtonTitle
+                               completionHandler:(ClusterPrePermissionCompletionHandler)completionHandler;
+
 
 @end

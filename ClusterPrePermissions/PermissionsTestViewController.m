@@ -92,6 +92,25 @@
 }
 
 
+- (IBAction)onNotificationButtonPermissionTapped:(id)sender
+{
+    ClusterPrePermissions *permissions = [ClusterPrePermissions sharedPermissions];
+    [permissions showNotificationPermissionsWithType:ClusterNotificationTypeAlert
+                                               title:@"Send push notifications?"
+                                          message:@"Your message here"
+                                  denyButtonTitle:@"Not Now"
+                                 grantButtonTitle:@"Give Access"
+                                completionHandler:^(BOOL hasPermission,
+                                                    ClusterDialogResult userDialogResult,
+                                                    ClusterDialogResult systemDialogResult) {
+                                    [self updateResultLabel:self.locationPermissionResultLabel
+                                             withPermission:hasPermission
+                                           userDialogResult:userDialogResult
+                                         systemDialogResult:systemDialogResult];
+                                }];
+}
+
+
 - (void) updateResultLabel:(UILabel *)resultLabel
             withPermission:(BOOL)hasPermission
           userDialogResult:(ClusterDialogResult)userDialogResult
