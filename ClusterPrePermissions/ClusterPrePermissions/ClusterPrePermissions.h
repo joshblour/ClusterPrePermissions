@@ -188,7 +188,7 @@ typedef void (^ClusterPrePermissionCompletionHandler)(BOOL hasPermission,
                                completionHandler:(ClusterPrePermissionCompletionHandler)completionHandler;
 
 - (void) showNotificationPermissionsWithType:(ClusterNotificationType)requestedType
-                                    category:(UIUserNotificationCategory *)notificationCategory
+                                    categories:(NSMutableSet *)notificationCategories
                                        title:(NSString *)requestTitle
                                      message:(NSString *)message
                              denyButtonTitle:(NSString *)denyButtonTitle
