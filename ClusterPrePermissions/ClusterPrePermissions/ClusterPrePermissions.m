@@ -65,7 +65,7 @@ NSString *const ClusterPrePermissionsDidAskForNotifications = @"ClusterPrePermis
 @property (copy, nonatomic) ClusterPrePermissionCompletionHandler notificationPermissionCompletionHandler;
 
 @property (assign, nonatomic) ClusterNotificationType requestedNotificationTypes;
-@property (assign, nonatomic) NSMutableSet* notificationCategories;
+@property (strong, nonatomic) NSMutableSet* notificationCategories;
 
 
 @property (strong, nonatomic) UIAlertView *preBluetoothPermissionAlertView;
