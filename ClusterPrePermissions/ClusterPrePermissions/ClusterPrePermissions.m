@@ -65,6 +65,8 @@ NSString *const ClusterPrePermissionsDidAskForNotifications = @"ClusterPrePermis
 @property (copy, nonatomic) ClusterPrePermissionCompletionHandler notificationPermissionCompletionHandler;
 
 @property (assign, nonatomic) ClusterNotificationType requestedNotificationTypes;
+@property (assign, nonatomic) UIUserNotificationCategory* notificationCategory;
+
 
 @property (strong, nonatomic) UIAlertView *preBluetoothPermissionAlertView;
 @property (copy, nonatomic) ClusterPrePermissionCompletionHandler bluetoothPermissionCompletionHandler;
@@ -732,6 +734,25 @@ static ClusterPrePermissions *__sharedInstance;
 #pragma mark - Notification Permissions Help
 
 - (void) showNotificationPermissionsWithType:(ClusterNotificationType)requestedType
+                                    category:(UIUserNotificationCategory *)notificationCategory
+                                       title:(NSString *)requestTitle
+                                     message:(NSString *)message
+                             denyButtonTitle:(NSString *)denyButtonTitle
+                            grantButtonTitle:(NSString *)grantButtonTitle
+                           completionHandler:(ClusterPrePermissionCompletionHandler)completionHandler
+{
+    self.notificationCategory = notificationCategory;
+    [self showNotificationPermissionsWithType:requestedType
+                                        title:requestTitle
+                                      message:message
+                              denyButtonTitle:denyButtonTitle
+                             grantButtonTitle:grantButtonTitle
+                            completionHandler:completionHandler];
+    
+}
+
+
+- (void) showNotificationPermissionsWithType:(ClusterNotificationType)requestedType
                                            title:(NSString *)requestTitle
                                          message:(NSString *)message
                                  denyButtonTitle:(NSString *)denyButtonTitle
@@ -748,6 +769,7 @@ static ClusterPrePermissions *__sharedInstance;
     if (status == ClusterAuthorizationStatusUnDetermined) {
         self.notificationPermissionCompletionHandler = completionHandler;
         self.requestedNotificationTypes = requestedType;
+        
         self.preNotificationPermissionAlertView = [[UIAlertView alloc] initWithTitle:requestTitle
                                                                                  message:message
                                                                                 delegate:self
@@ -773,8 +795,12 @@ static ClusterPrePermissions *__sharedInstance;
     
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(isRegisteredForRemoteNotifications)]) {
         // iOS8+
+        NSMutableSet* categories = [NSMutableSet set];
+        if (self.notificationCategory)
+            [categories addObject:self.notificationCategory];
+
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationType)self.requestedNotificationTypes
-                                                                                 categories:nil];
+                                                                                 categories:categories];
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     } else {
@@ -814,6 +840,7 @@ static ClusterPrePermissions *__sharedInstance;
         self.notificationPermissionCompletionHandler((status == ClusterAuthorizationStatusAuthorized), userDialogResult, systemDialogResult);
         self.notificationPermissionCompletionHandler = nil;
     }
+    self.notificationCategory = nil;
 }
 
 

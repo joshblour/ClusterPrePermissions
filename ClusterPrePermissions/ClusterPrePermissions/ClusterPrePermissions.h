@@ -187,6 +187,14 @@ typedef void (^ClusterPrePermissionCompletionHandler)(BOOL hasPermission,
                                 grantButtonTitle:(NSString *)grantButtonTitle
                                completionHandler:(ClusterPrePermissionCompletionHandler)completionHandler;
 
+- (void) showNotificationPermissionsWithType:(ClusterNotificationType)requestedType
+                                    category:(UIUserNotificationCategory *)notificationCategory
+                                       title:(NSString *)requestTitle
+                                     message:(NSString *)message
+                             denyButtonTitle:(NSString *)denyButtonTitle
+                            grantButtonTitle:(NSString *)grantButtonTitle
+                           completionHandler:(ClusterPrePermissionCompletionHandler)completionHandler;
+
 - (void) showBluetoothPermissionsWithTitle:(NSString *)requestTitle
                                   message:(NSString *)message
                           denyButtonTitle:(NSString *)denyButtonTitle
