@@ -25,6 +25,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#define kClusterPrePermissionsStatusChangedNotification @"ClusterPrePermissionsStatusChangedNotification"
 
 @interface ClusterPrePermissions : NSObject
 

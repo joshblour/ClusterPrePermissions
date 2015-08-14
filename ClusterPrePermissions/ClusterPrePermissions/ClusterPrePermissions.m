@@ -367,6 +367,7 @@ static ClusterPrePermissions *__sharedInstance;
                                               systemDialogResult);
         self.avPermissionCompletionHandler = nil;
     }
+    [self notifyOfStatusChange];
 }
 
 
@@ -451,6 +452,7 @@ static ClusterPrePermissions *__sharedInstance;
                                               systemDialogResult);
         self.photoPermissionCompletionHandler = nil;
     }
+    [self notifyOfStatusChange];
 }
 
 
@@ -524,6 +526,7 @@ static ClusterPrePermissions *__sharedInstance;
                                                 systemDialogResult);
         self.contactPermissionCompletionHandler = nil;
     }
+    [self notifyOfStatusChange];
 }
 
 #pragma mark - Event Permissions Help
@@ -605,6 +608,7 @@ static ClusterPrePermissions *__sharedInstance;
                                                 systemDialogResult);
         self.eventPermissionCompletionHandler = nil;
     }
+    [self notifyOfStatusChange];
 }
 
 - (NSUInteger)EKEquivalentEventType:(ClusterEventAuthorizationType)eventType {
@@ -714,6 +718,7 @@ static ClusterPrePermissions *__sharedInstance;
     if (self.locationManager) {
         [self.locationManager stopUpdatingLocation], self.locationManager = nil;
     }
+    [self notifyOfStatusChange];
 }
 
 - (BOOL)locationAuthorizationStatusPermitsAccess:(CLAuthorizationStatus)authorizationStatus
@@ -837,6 +842,7 @@ static ClusterPrePermissions *__sharedInstance;
         self.notificationPermissionCompletionHandler = nil;
     }
     self.notificationCategories = nil;
+    [self notifyOfStatusChange];
 }
 
 
@@ -911,7 +917,7 @@ static ClusterPrePermissions *__sharedInstance;
     if (self.peripheralManager) {
         [self.peripheralManager stopAdvertising], self.peripheralManager = nil;
     }
-
+    [self notifyOfStatusChange];
 }
 
 #pragma mark CBPeripheralManagerDelegate
@@ -924,6 +930,12 @@ static ClusterPrePermissions *__sharedInstance;
     }
 }
 
+
+#pragma mark - Notifications
+
+- (void)notifyOfStatusChange {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kClusterPrePermissionsStatusChangedNotification object:nil];
+}
 
 
 #pragma mark - UIAlertViewDelegate
